@@ -22,7 +22,7 @@ For a one-click interactive demo, use the public HuggingFace Space:
 ## 30-second quickstart
 
 ```bash
-git clone https://github.com/Umesh1608/solvaspec
+git clone https://github.com/Umesh1608/solvaspec-public
 cd solvaspec
 conda env create -f environment.yml
 conda activate solvaspec

@@ -15,7 +15,7 @@ authors:
   - given-names: David
     family-names: Detrich
     affiliation: Midwest Bioprocessing Center
-repository-code: https://github.com/Umesh1608/solvaspec
+repository-code: https://github.com/Umesh1608/solvaspec-public
 url: https://huggingface.co/spaces/MWBC/SolvaSpec_MWBC
 license: MIT
 keywords:
