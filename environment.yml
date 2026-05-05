@@ -1,0 +1,23 @@
+name: solvaspec
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch=2.4
+  - cpuonly
+  - rdkit=2024.03
+  - scikit-learn=1.6
+  - numpy<2
+  - scipy
+  - pandas
+  - matplotlib
+  - jupyterlab
+  - pip
+  - pip:
+      - torch_geometric==2.7
+      - chemprop==2.0
+      - gradio==5.0
+      - gdown
+      - tqdm

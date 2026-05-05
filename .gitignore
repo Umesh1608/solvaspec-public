@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Large model artefacts (download from Zenodo, do not commit)
+checkpoints/*.pt
+checkpoints/*.joblib
+checkpoints/*.pkl
+
+# Large data (download from Zenodo, do not commit)
+data/qm9s.pt
+data/ornl_filtered.parquet
+data/F13_*.csv
+data/wetlab_*.csv
+
+# Run outputs
+results/
+*.log
+*.tmp
+
+# Local-only directories
+local/
+scratch/

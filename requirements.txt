@@ -1,0 +1,14 @@
+# Pip-only fallback for environments where conda is not available.
+# Tested on Python 3.11. For GPU, install torch with the appropriate CUDA build.
+torch==2.4.*
+torch_geometric==2.7.*
+rdkit==2024.3.*
+chemprop==2.0.*
+scikit-learn==1.6.*
+numpy<2
+scipy
+pandas
+matplotlib
+gradio==5.*
+gdown
+tqdm

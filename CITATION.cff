@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+title: SolvaSpec
+message: >-
+  If you use SolvaSpec in academic work, please cite both the
+  software (Zenodo) and the accompanying article.
+type: software
+authors:
+  - given-names: Umesh
+    family-names: Arampath
+    email: umeshcmbac@gmail.com
+    affiliation: Midwest Bioprocessing Center
+  - given-names: Birgit
+    family-names: Pioch
+    affiliation: Midwest Bioprocessing Center
+  - given-names: David
+    family-names: Detrich
+    affiliation: Midwest Bioprocessing Center
+repository-code: https://github.com/Umesh1608/solvaspec
+url: https://huggingface.co/spaces/MWBC/SolvaSpec_MWBC
+license: MIT
+keywords:
+  - UV-Vis spectroscopy
+  - excited states
+  - graph neural network
+  - SE(3)-equivariant
+  - PaiNN
+  - sunscreen
+  - virtual screening
+preferred-citation:
+  type: article
+  title: >-
+    SolvaSpec: An experimentally validated deep-learning prediction platform
+    for solvent-aware UV-Vis spectra and extinction coefficients
+  authors:
+    - given-names: Umesh
+      family-names: Arampath
+    - given-names: Birgit
+      family-names: Pioch
+    - given-names: David
+      family-names: Detrich
+  journal: npj Computational Materials
+  year: 2026
+  notes: In submission
