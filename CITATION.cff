@@ -7,14 +7,18 @@ type: software
 authors:
   - given-names: Umesh
     family-names: Arampath
-    email: umeshcmbac@gmail.com
+    email: uarampath@mwbioprocessing.com
     affiliation: Midwest Bioprocessing Center
-  - given-names: Birgit
-    family-names: Pioch
+  - given-names: Bryant
+    family-names: Pero
     affiliation: Midwest Bioprocessing Center
   - given-names: David
-    family-names: Detrich
+    family-names: Demirjian
     affiliation: Midwest Bioprocessing Center
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20044274
+    description: Zenodo archive of the source code (v1.0)
 repository-code: https://github.com/Umesh1608/solvaspec-public
 url: https://huggingface.co/spaces/MWBC/SolvaSpec_MWBC
 license: MIT
@@ -34,10 +38,10 @@ preferred-citation:
   authors:
     - given-names: Umesh
       family-names: Arampath
-    - given-names: Birgit
-      family-names: Pioch
+    - given-names: Bryant
+      family-names: Pero
     - given-names: David
-      family-names: Detrich
+      family-names: Demirjian
   journal: npj Computational Materials
   year: 2026
   notes: In submission
