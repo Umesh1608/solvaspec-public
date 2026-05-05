@@ -3,20 +3,18 @@
 
 Usage
 -----
+    python reproduce_paper.py --wetlab     # 32-pair λmax MAE on FDA UV filters
 
-    python reproduce_paper.py --wetlab          # 32-pair blind-test MAE
-    python reproduce_paper.py --gdb9ex          # GDB-9-Ex SRMSE
-    python reproduce_paper.py --all             # everything
+Reads the PaiNN-SCA, Spectrum Hybrid, and ε Random Forest checkpoints from
+``checkpoints/`` and the wetlab CSV from ``data/wetlab_lambda_max.csv``,
+runs the full pipeline on every (solute, solvent) pair, and prints the
+paper's headline metrics:
 
-The script reads checkpoints from `checkpoints/` and data from `data/`,
-runs the full SolvaSpec pipeline (PaiNN-SCA backbone + Spectrum Hybrid
-head + ε Random Forest) on the held-out evaluation set, and prints the
-paper's headline metrics.
+    SolvaSpec wetlab blind-test MAE: 9.8 nm  (RMSE 13.2, Pearson r = 0.79)
+    12-pair best-resolved MAE: 3.2 nm
 
-Expected wallclock on a CPU laptop:
-  --wetlab    : ~30 seconds
-  --gdb9ex    : ~10 minutes (96,586 molecules)
-  --all       : ~10 minutes
+Expected wallclock on a CPU laptop: ~5 min for all 32 pairs (8 conformers ×
+5-fold ensemble × 32 pairs).
 """
 from __future__ import annotations
 
@@ -27,47 +25,50 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Make sure the local solvaspec package is importable
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
 
-# ----------------------------------------------------------- evaluation tasks
-
-
 def reproduce_wetlab(verbose: bool = True) -> dict:
-    """Run SolvaSpec on the 32 in-house wetlab measurements and report MAE.
-
-    Reproduces the headline number from the paper:
-        wetlab_lambda_max_MAE = 9.8 nm
-        12-pair best-resolved MAE = 3.2 nm
-    """
-    from solvaspec import predict_solvent_spectrum
+    """Run SolvaSpec on the 32 in-house wetlab measurements and report MAE."""
+    from solvaspec import predict
 
     wetlab_csv = ROOT / "data" / "wetlab_lambda_max.csv"
     if not wetlab_csv.exists():
         raise FileNotFoundError(
             f"{wetlab_csv} not found. "
             "Download the wetlab archive from the Zenodo DOI listed in "
-            "data/README.md and place it in this directory."
+            "data/README.md, or copy it from the development repository."
         )
     df = pd.read_csv(wetlab_csv)
 
-    preds, errs = [], []
-    for _, row in df.iterrows():
+    preds, errs, sigmas = [], [], []
+    for i, row in df.iterrows():
         smi = row["smiles"]
-        solv = row["solvent"]   # "ethanol" or "methanol"
-        truth = row["lambda_max_exp_nm"]
-        pred = predict_solvent_spectrum(
-            smi, solv,
-            n_conformers=8,
-            return_uncertainty=True,
-        )
-        preds.append(pred.lambda_max_nm)
-        errs.append(pred.lambda_max_nm - truth)
+        solv = row["solvent_name"]   # "EtOH" or "MeOH"
+        truth = float(row["lambda_max_exp"])
+        if verbose:
+            print(f"  [{i + 1:>2d}/{len(df)}] {row['molecule']:<16s} ({solv})  ...", end="", flush=True)
+        result = predict(smi)
+        if solv == "EtOH":
+            pred = result.etoh_lambda_max
+            sigma = result.etoh_sigma
+        elif solv == "MeOH":
+            pred = result.meoh_lambda_max
+            sigma = result.meoh_sigma
+        else:
+            raise ValueError(f"unsupported solvent {solv}")
+        preds.append(pred)
+        errs.append(pred - truth)
+        sigmas.append(sigma)
+        if verbose:
+            print(f"  pred {pred:6.1f} nm   exp {truth:6.1f} nm   "
+                  f"err {pred - truth:+6.1f} nm   σ {sigma:5.1f}")
 
     df["lambda_max_pred_nm"] = preds
     df["error_nm"] = errs
+    df["cross_fold_sigma_nm"] = sigmas
+
     abs_errs = np.abs(errs)
     abs_errs_sorted = np.sort(abs_errs)
     top12 = abs_errs_sorted[:12]
@@ -75,58 +76,37 @@ def reproduce_wetlab(verbose: bool = True) -> dict:
     metrics = {
         "MAE_nm": float(abs_errs.mean()),
         "RMSE_nm": float(np.sqrt(np.mean(np.square(errs)))),
-        "Pearson_r": float(np.corrcoef(df["lambda_max_exp_nm"], preds)[0, 1]),
+        "Pearson_r": float(np.corrcoef(df["lambda_max_exp"], preds)[0, 1]),
         "top12_MAE_nm": float(top12.mean()),
-        "n_within_10nm": int((abs_errs <= 10).sum()),
-        "n_total": int(len(abs_errs)),
+        "n_within_10nm_pairs": int((abs_errs <= 10).sum()),
+        "n_total_pairs": int(len(abs_errs)),
     }
     if verbose:
-        print("=" * 60)
+        print("\n" + "=" * 64)
         print("SolvaSpec wetlab blind-test reproduction")
-        print("=" * 60)
-        print(f"  MAE              = {metrics['MAE_nm']:.2f} nm  (paper: 9.8 nm)")
-        print(f"  RMSE             = {metrics['RMSE_nm']:.2f} nm  (paper: 13.2 nm)")
-        print(f"  Pearson r        = {metrics['Pearson_r']:.3f}  (paper: 0.79)")
-        print(f"  12-pair best MAE = {metrics['top12_MAE_nm']:.2f} nm  (paper: 3.2 nm)")
-        print(f"  within ±10 nm    = {metrics['n_within_10nm']}/{metrics['n_total']}  (paper: 10/16 mols, ~20/32 pairs)")
+        print("=" * 64)
+        print(f"  MAE                  = {metrics['MAE_nm']:6.2f} nm   (paper: 9.8 nm)")
+        print(f"  RMSE                 = {metrics['RMSE_nm']:6.2f} nm   (paper: 13.2 nm)")
+        print(f"  Pearson r            = {metrics['Pearson_r']:6.3f}    (paper: 0.79)")
+        print(f"  12-pair best-resol.  = {metrics['top12_MAE_nm']:6.2f} nm   (paper: 3.2 nm)")
+        print(f"  pairs within ±10 nm  = {metrics['n_within_10nm_pairs']:>2d}/{metrics['n_total_pairs']}   "
+              f"(paper: ~20/32)")
+        print("=" * 64)
+
     return metrics
-
-
-def reproduce_gdb9ex(verbose: bool = True) -> dict:
-    """Run PaiNN-SCA on the 96,586-molecule GDB-9-Ex held-out test and
-    reproduce the headline SRMSE number (mean 0.0047, median 0.0023)."""
-    from solvaspec.gdb9ex_eval import evaluate_gdb9ex
-    metrics = evaluate_gdb9ex(verbose=verbose)
-    if verbose:
-        print("=" * 60)
-        print("PaiNN-SCA GDB-9-Ex reproduction")
-        print("=" * 60)
-        print(f"  mean SRMSE   = {metrics['srmse_mean']:.4f}  (paper: 0.0047)")
-        print(f"  median SRMSE = {metrics['srmse_median']:.4f}  (paper: 0.0023)")
-        print(f"  n_molecules  = {metrics['n']}  (paper: 96,586)")
-    return metrics
-
-
-# --------------------------------------------------------------- entry point
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--wetlab", action="store_true",
                         help="Reproduce the 32-pair wetlab blind-test MAE.")
-    parser.add_argument("--gdb9ex", action="store_true",
-                        help="Reproduce GDB-9-Ex SRMSE on 96,586 molecules.")
-    parser.add_argument("--all", action="store_true", help="Run every reproducer.")
     args = parser.parse_args()
 
-    if not (args.wetlab or args.gdb9ex or args.all):
+    if not args.wetlab:
         parser.print_help()
         return 1
-
-    if args.wetlab or args.all:
+    if args.wetlab:
         reproduce_wetlab()
-    if args.gdb9ex or args.all:
-        reproduce_gdb9ex()
     return 0
 
 
