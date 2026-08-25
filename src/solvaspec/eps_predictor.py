@@ -33,7 +33,9 @@ from pathlib import Path
 
 import numpy as np
 
-MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
+# All model artefacts live in the repo-root checkpoints/ directory (same as the
+# PaiNN-SCA backbone and Spectrum Hybrid folds loaded by inference.py).
+MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "checkpoints"
 RF_PATH = MODELS_DIR / "eps_rf_solvent.pkl"
 
 # Solvent name → SMILES mapping. Recognised solvents are featurised via Morgan

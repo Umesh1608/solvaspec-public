@@ -21,16 +21,21 @@ venv/
 *.swp
 .DS_Store
 
-# Large model artefacts (download from Zenodo, do not commit)
+# Large model artefacts. The headline-reproduction checkpoints are bundled
+# (see checkpoints/README.md); any other .pt/.pkl/.joblib stay untracked.
 checkpoints/*.pt
 checkpoints/*.joblib
 checkpoints/*.pkl
+!checkpoints/painn_sca_gas.pt
+!checkpoints/solvaspec_fold*.pt
+!checkpoints/eps_rf_solvent.pkl
 
-# Large data (download from Zenodo, do not commit)
+# Large data. The 32-pair wetlab blind-test set is bundled; other corpora stay untracked.
 data/qm9s.pt
 data/ornl_filtered.parquet
 data/F13_*.csv
 data/wetlab_*.csv
+!data/wetlab_lambda_max.csv
 
 # Run outputs
 results/

@@ -484,3 +484,38 @@ def predict(smiles: str) -> SolvaSpecPrediction:
         integrated_epsilon_uva=int_uva,
         integrated_epsilon_uv=int_uv,
     )
+
+
+def predict_lambda_max_from_cached_sticks(E_gas, f_gas, solute_smiles, solvent_smiles):
+    """Solvent-corrected lambda_max (nm) from pre-computed gas-phase (E, f) sticks.
+
+    This is the exact path that produced the paper's wetlab blind-test number: the
+    5-fold Spectrum Hybrid ensemble is fed the cached multi-conformer PaiNN features
+    (E in eV, f linear; 50 states) together with Chemprop D-MPNN graphs of the solute
+    and solvent, instead of regenerating conformers on the fly. Because the Chemprop
+    encoders mean-pool over atoms, the solute/solvent graphs may be rebuilt from SMILES.
+    Returns (lambda_max_mean_nm, cross_fold_sigma_nm).
+    """
+    import torch
+    from chemprop import data as chemprop_data
+    from rdkit import Chem
+
+    folds = _load_hybrid_folds()
+    device = _get_device()
+    featurizer = _get_chemprop_featurizer()
+
+    E_t = torch.as_tensor(np.asarray(E_gas, dtype=np.float32), device=device).unsqueeze(0)
+    f_t = torch.as_tensor(np.asarray(f_gas, dtype=np.float32), device=device).unsqueeze(0)
+
+    solute_bmg = chemprop_data.BatchMolGraph([featurizer(Chem.MolFromSmiles(solute_smiles))])
+    solute_bmg.to(device)
+    solvent_bmg = chemprop_data.BatchMolGraph([featurizer(Chem.MolFromSmiles(solvent_smiles))])
+    solvent_bmg.to(device)
+
+    lmax = []
+    with torch.no_grad():
+        for model in folds:
+            out = model(E_t, f_t, solute_bmg, solvent_bmg)
+            lmax.append(float(out["lambda_max"].item()))
+    lmax = np.asarray(lmax)
+    return float(lmax.mean()), float(lmax.std())

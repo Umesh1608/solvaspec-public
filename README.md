@@ -13,7 +13,7 @@ For a one-click interactive demo, use the public HuggingFace Space:
 |---|---|
 | `src/solvaspec/` | Core PaiNN-SCA + Spectrum Hybrid head + ε Random Forest pipeline |
 | `checkpoints/` | Trained model artefacts (download instructions inside) |
-| `data/` | F13 splits, wetlab measurements, ε calibration set indices |
+| `data/` | solute–solvent corpus splits, wetlab measurements, ε calibration set indices |
 | `notebooks/` | Worked-example notebooks (predict a molecule; reproduce wetlab results) |
 | `reproduce_paper.py` | **Single command that regenerates the headline wetlab MAE number** |
 | `scripts/` | All figure-generation and analysis scripts used in the paper |
@@ -57,7 +57,7 @@ result.plot()  # saves a PNG of the predicted curve
 |---|---|
 | Source code (this repo) | Zenodo: `10.5281/zenodo.XXXXXXXX` (assigned on first release) |
 | Wetlab UV-Vis measurements (32 spectra) | Zenodo: `10.5281/zenodo.YYYYYYYY` |
-| F13 solute-solvent corpus splits | Zenodo: `10.5281/zenodo.ZZZZZZZZ` |
+| solute–solvent corpus splits | Zenodo: `10.5281/zenodo.ZZZZZZZZ` |
 | ε calibration set indices | Zenodo: `10.5281/zenodo.WWWWWWWW` |
 
 The Zenodo entries are the canonical citation targets. This GitHub repo is the development mirror; cite the Zenodo DOIs in academic work.

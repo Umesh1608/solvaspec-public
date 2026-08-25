@@ -1,29 +1,22 @@
 # Model checkpoints
 
-Checkpoints are not committed to git (they are 6–12 MB each and binary).
-Download from the Zenodo archive and place them here:
+All checkpoints needed to reproduce the headline wetlab result are **bundled in
+this directory** — no download step is required.
 
-| File | Source | Size |
+| File | Role | Size |
 |---|---|---|
-| `painn_sca_50exc_oschead_3layer.pt` | Zenodo `10.5281/zenodo.XXXXXXXX` | 6.1 MB |
-| `spectrum_hybrid_5fold.pt` | Zenodo `10.5281/zenodo.XXXXXXXX` | 1.2 MB (ensemble) |
-| `eps_random_forest.joblib` | Zenodo `10.5281/zenodo.XXXXXXXX` | 8.3 MB |
+| `painn_sca_gas.pt` | PaiNN-SCA gas-phase backbone (50 states, 3-layer oscillator head) | 6.1 MB |
+| `solvaspec_fold0.pt` … `solvaspec_fold4.pt` | Spectrum Hybrid 5-fold ensemble (solvent correction) | 1.2 MB each |
+| `eps_rf_solvent.pkl` | Solvent-aware ε Random Forest (absolute molar extinction) | 46 MB |
 
-## Auto-download
+Together these drive `predict()` (`src/solvaspec/inference.py`) and the
+`python reproduce_paper.py --wetlab` headline reproduction.
 
-```bash
-python -m solvaspec.download_checkpoints
-```
-
-Downloads all three artefacts via `gdown` and places them in this directory.
-
-## Verifying the download
-
-After running the download script, run:
+## Sanity check
 
 ```bash
-python -c "from solvaspec import verify_checkpoints; verify_checkpoints()"
+python -c "from solvaspec import predict; print(round(predict('CCO').gas_lambda_max, 1))"
 ```
 
-This loads each checkpoint, runs a single-molecule sanity inference, and
-prints `PASS` or `FAIL`.
+Loads every checkpoint and runs a single-molecule inference; prints a number if
+the pipeline is wired up correctly.

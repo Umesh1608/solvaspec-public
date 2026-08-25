@@ -1,0 +1,33 @@
+molecule,smiles,solvent_name,solvent_smiles,lambda_max_exp
+Amiloxate,COc1ccc(/C=C/C(=O)OCCC(C)C)cc1,EtOH,CCO,309
+Amiloxate,COc1ccc(/C=C/C(=O)OCCC(C)C)cc1,MeOH,CO,298
+Avobenzone,COc1ccc(C(=O)CC(=O)c2ccc(C(C)(C)C)cc2)cc1,EtOH,CCO,358
+Avobenzone,COc1ccc(C(=O)CC(=O)c2ccc(C(C)(C)C)cc2)cc1,MeOH,CO,358
+Caffeic Acid,O=C(O)/C=C/c1ccc(O)c(O)c1,EtOH,CCO,325
+Caffeic Acid,O=C(O)/C=C/c1ccc(O)c(O)c1,MeOH,CO,325
+Cinnamic Acid,O=C(O)/C=C/c1ccccc1,EtOH,CCO,275
+Cinnamic Acid,O=C(O)/C=C/c1ccccc1,MeOH,CO,276
+Coumaric Acid,O=C(O)/C=C/c1ccc(O)cc1,EtOH,CCO,310
+Coumaric Acid,O=C(O)/C=C/c1ccc(O)cc1,MeOH,CO,309
+Dioxybenzone,COc1ccc(C(=O)c2ccccc2O)c(O)c1,EtOH,CCO,283
+Dioxybenzone,COc1ccc(C(=O)c2ccccc2O)c(O)c1,MeOH,CO,283
+Ferulic Acid,COc1cc(/C=C/C(=O)O)ccc1O,EtOH,CCO,324
+Ferulic Acid,COc1cc(/C=C/C(=O)O)ccc1O,MeOH,CO,324
+Homosalate,CC1CC(OC(=O)c2ccccc2O)CC(C)(C)C1,EtOH,CCO,308
+Homosalate,CC1CC(OC(=O)c2ccccc2O)CC(C)(C)C1,MeOH,CO,308
+Octinoxate,CCCCC(CC)COC(=O)/C=C/c1ccc(OC)cc1,EtOH,CCO,309
+Octinoxate,CCCCC(CC)COC(=O)/C=C/c1ccc(OC)cc1,MeOH,CO,308
+Octisalate,CCCCC(CC)COC(=O)c1ccccc1O,EtOH,CCO,308
+Octisalate,CCCCC(CC)COC(=O)c1ccccc1O,MeOH,CO,308
+Octocrylene,CCCCC(CC)COC(=O)/C(C#N)=C\c1ccccc1,EtOH,CCO,301
+Octocrylene,CCCCC(CC)COC(=O)/C(C#N)=C\c1ccccc1,MeOH,CO,302
+Oxybenzone,COc1ccc(C(=O)c2ccccc2)c(O)c1,EtOH,CCO,287
+Oxybenzone,COc1ccc(C(=O)c2ccccc2)c(O)c1,MeOH,CO,287
+PABA,Nc1ccc(C(=O)O)cc1,EtOH,CCO,291
+PABA,Nc1ccc(C(=O)O)cc1,MeOH,CO,290
+Padimate O,CCCCC(CC)COC(=O)c1ccc(N(C)C)cc1,EtOH,CCO,310
+Padimate O,CCCCC(CC)COC(=O)c1ccc(N(C)C)cc1,MeOH,CO,310
+Sinapic Acid,COc1cc(/C=C/C(=O)O)cc(OC)c1O,EtOH,CCO,324
+Sinapic Acid,COc1cc(/C=C/C(=O)O)cc(OC)c1O,MeOH,CO,324
+Sulisobenzone,COc1ccc(C(=O)c2ccc(S(=O)(=O)O)cc2)c(O)c1,EtOH,CCO,287
+Sulisobenzone,COc1ccc(C(=O)c2ccc(S(=O)(=O)O)cc2)c(O)c1,MeOH,CO,286
