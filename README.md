@@ -2,7 +2,7 @@
 
 > An experimentally validated deep-learning prediction platform for solvent-aware UV-Vis spectra and molar extinction coefficients.
 
-This repository accompanies the paper *SolvaSpec: An experimentally validated deep-learning prediction platform for solvent-aware UV-Vis spectra and extinction coefficients* (npj Computational Materials, in submission).
+This repository accompanies the paper *SolvaSpec: An experimentally validated deep-learning prediction platform for solvent-aware UV-Vis spectra and extinction coefficients* (manuscript, 2026).
 
 For a one-click interactive demo, use the public HuggingFace Space:
 **https://huggingface.co/spaces/MWBC/SolvaSpec_MWBC**
@@ -76,10 +76,9 @@ This sequentially regenerates every figure in `figures/` from the underlying CSV
 @article{Arampath2026SolvaSpec,
   title   = {SolvaSpec: An experimentally validated deep-learning prediction
              platform for solvent-aware UV-Vis spectra and extinction coefficients},
-  author  = {Arampath, Umesh and Pioch, Birgit and Detrich, David},
-  journal = {npj Computational Materials},
+  author  = {Arampath, Umesh and Pero, Bryant and Demirjian, David},
   year    = {2026},
-  note    = {In submission}
+  note    = {Manuscript}
 }
 ```
 
